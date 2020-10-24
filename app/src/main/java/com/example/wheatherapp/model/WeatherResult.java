@@ -44,12 +44,5 @@ public class WeatherResult  {
     public void setIcon(String icon) {
         this.icon = icon;
     }
-    @BindingAdapter({"bind:icon"})
-    public static void setImageUrl(ImageView imageView, String url) {
-        if (url == null) {
-            imageView.setImageDrawable(null);
-        } else {
-            Picasso.get().load("http://openweathermap.org/img/w/"+url+".png").into(imageView); // replace with your fav image loading lib
-        }
-    }
+
 }

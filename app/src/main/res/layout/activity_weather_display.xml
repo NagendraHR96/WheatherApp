@@ -1,141 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:bind="http://schemas.android.com/tools"
-    tools:context=".WeatherDisplayActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="weather"
-            type="com.example.wheatherapp.model.WeatherResult" />
+            type="com.example.wheatherapp.model.WeatherModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:background="@color/colorPrimary"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
 
-      <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/temperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textColor="@color/white"
-        android:textSize="50sp" />
-        <ImageView
-            android:layout_gravity="center"
+            <TextView
+                android:id="@+id/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@{ (int)(weather.current.temp -273) + @string/degree}"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+
+            <ImageView
+                android:id="@+id/background_image"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                bind:icon="@{(weather.current.weather!= null &amp;&amp; weather.current.weather.size()>0) ? weather.current.weather.get(0).icon:null}"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:id="@+id/background_image"
-            android:layout_width="48dp"
-            bind:icon="@{weather.icon}"
-            android:layout_height="48dp">
-        </ImageView>
-    </LinearLayout>
-
-    <TextView
-        android:textSize="25sp"
-        android:id="@+id/description"
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white" />
+            android:text="@{weather.current.weather.get(0).description}"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
 
         <androidx.cardview.widget.CardView
-            android:layout_marginRight="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
+            android:layout_marginRight="1dp"
             android:elevation="2dp"
             app:cardBackgroundColor="@color/colorPrimary"
-            app:cardCornerRadius="2dp"
-            android:layout_height="wrap_content">
+            app:cardCornerRadius="2dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_margin="10dp"
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:weightSum="2.3"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:textColor="@color/white"
-                android:id="@+id/today"
-                android:text="@string/today"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-            </TextView>
+                    <TextView
+                        android:id="@+id/today"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/today"
+                        android:textColor="@color/white"/>
 
-            <TextView
-                android:layout_weight="1"
-                android:textColor="@color/white"
-                android:id="@+id/tod_temp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-            </TextView>
+                    <TextView
+                        android:id="@+id/tod_temp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@{ (int)(weather.daily.get(0).temp.max -273) + @string/degree + `/` + (int)( weather.daily.get(0).temp.min -273) + @string/degree }"
+                        android:textColor="@color/white"/>
 
-        </LinearLayout>
-        <LinearLayout
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+                </LinearLayout>
 
-        <TextView
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:id="@+id/tomorrow"
-            android:text="@string/tomorrow"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-        </TextView>
-        <TextView
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:id="@+id/tom_temp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-        </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2.3">
 
-    </LinearLayout>
-      <LinearLayout
-          android:layout_margin="10dp"
-          android:layout_width="match_parent"
-          android:orientation="horizontal"
-          android:layout_height="wrap_content">
-          <TextView
-              android:layout_weight="1"
-              android:textColor="@color/white"
-              android:id="@+id/week"
-              android:text="Mon"
-              android:layout_width="0dp"
-              android:layout_height="wrap_content">
-          </TextView>
+                    <TextView
+                        android:id="@+id/tomorrow"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/tomorrow"
+                        android:textColor="@color/white"/>
 
-          <TextView
-              android:layout_weight="1"
-              android:textColor="@color/white"
-              android:id="@+id/week_temp"
-              android:layout_width="0dp"
-              android:layout_height="wrap_content">
-          </TextView>
-      </LinearLayout>
+                    <TextView
+                        android:id="@+id/tom_temp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@{ (int)(weather.daily.get(1).temp.max -273) + @string/degree + `/` + (int)( weather.daily.get(1).temp.min -273 )+ @string/degree }"
+                        android:textColor="@color/white"/>
 
-                <Button
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight=".3"
+                        android:layout_height="24dp"
+                        android:layout_marginRight="10dp"
+                        bind:icon="@{weather.daily.get(1).weather.get(0).icon}" />
+
+                </LinearLayout>
+
+                <TextView
                     android:id="@+id/next"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:gravity="center"
                     android:background="@color/colorPrimary"
                     android:text="@string/next_4_days_forecost"
                     android:textColor="@color/white"
@@ -143,6 +134,11 @@
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/forecast_recyclerview"
+            android:layout_width="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

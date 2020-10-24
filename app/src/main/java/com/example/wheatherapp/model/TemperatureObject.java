@@ -1,5 +1,6 @@
 package com.example.wheatherapp.model;
 
+
 public class TemperatureObject {
     private double min;
     private double max;
@@ -55,4 +56,5 @@ public class TemperatureObject {
     public void setMorn(double morn) {
         this.morn = morn;
     }
+
 }

@@ -1,19 +1,21 @@
 package com.example.wheatherapp.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DailyForecastReport {
-    private int dt;
+    private long dt;
     private int sunrise;
     private int sunset;
     private TemperatureObject temp;
     private ArrayList<WeatherResult> weather;
 
-    public int getDt() {
+    public long getDt() {
         return dt;
     }
 
-    public void setDt(int dt) {
+    public void setDt(long dt) {
         this.dt = dt;
     }
 
@@ -47,5 +49,8 @@ public class DailyForecastReport {
 
     public void setWeather(ArrayList<WeatherResult> weather) {
         this.weather = weather;
+    }
+    public String getDate(){
+        return new SimpleDateFormat("dd/MM/yyyy").format(new Date(getDt()*1000));
     }
 }
