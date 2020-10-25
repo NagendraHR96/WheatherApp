@@ -2,7 +2,6 @@ package com.example.wheatherapp;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,7 +13,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,25 +20,19 @@ import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.wheatherapp.adapter.binder.ForecastDisplayAdapter;
+import com.example.wheatherapp.adapter.ForecastDisplayAdapter;
 import com.example.wheatherapp.databinding.ActivityWeatherDisplayBinding;
 import com.example.wheatherapp.model.WeatherModel;
 import com.example.wheatherapp.viewmodel.WeatherViewModel;
-
-import java.util.ArrayList;
 
 public class WeatherDisplayActivity extends AppCompatActivity {
     private static final int REQUEST_FINE_LOCATION = 23;
     WeatherViewModel weatherViewModel;
     ActivityWeatherDisplayBinding displayBinding;
     ProgressDialog progressDialog;
-    LocationManager manager;
-    RecyclerView forecast_recyclerview;
+    public LocationManager manager;
     ForecastDisplayAdapter forecastDisplayAdapter;
-
 
     private LocationListener currentLocation = new LocationListener() {
         @Override
@@ -120,8 +112,6 @@ public class WeatherDisplayActivity extends AppCompatActivity {
         }
         manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 10, currentLocation);
         progressDialog=new ProgressDialog(this,R.style.CustomProgress);
-//        if( progressDialog.getWindow() != null)
-//            progressDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         progressDialog.setMessage("Loading");
         progressDialog.setCancelable(false);
         if( progressDialog.getWindow() != null) {
@@ -147,6 +137,4 @@ public class WeatherDisplayActivity extends AppCompatActivity {
 
         return false;
     }
-
-
 }

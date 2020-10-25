@@ -19,6 +19,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.wheatherapp.model.WeatherModel;
 import com.example.wheatherapp.repository.ApiCall;
+import com.example.wheatherapp.repository.ResultHandler;
+import com.example.wheatherapp.repository.ServicecallMaster;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,9 +31,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class WeatherViewModel extends AndroidViewModel {
     MutableLiveData<WeatherModel> weatherInfo;
     private MediatorLiveData<Location> myLocation = new MediatorLiveData<>();
+    private ServicecallMaster servicecallMaster;
 
     public WeatherViewModel(@NonNull Application application) {
         super(application);
+        servicecallMaster=new ServicecallMaster();
     }
     public LiveData<WeatherModel> getWeatherInfo(){
         if (weatherInfo==null){
@@ -42,35 +46,12 @@ public class WeatherViewModel extends AndroidViewModel {
     }
 
     public void loadUrl(double latitude, double longitude){
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(ApiCall.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        ApiCall apiCall=retrofit.create(ApiCall.class);
-        Call<WeatherModel> call=apiCall.getWeatherModelCall(latitude,longitude);
-        call.enqueue(new Callback<WeatherModel>() {
+        servicecallMaster.getData(latitude, longitude, new ResultHandler<WeatherModel>() {
             @Override
-            public void onResponse(Call<WeatherModel> call, Response<WeatherModel> response) {
-                if (response.code()==200){
-                    WeatherModel weatherModel=response.body();
-
-                    Log.e("data", String.valueOf(response.body()));
-
-                    if (weatherModel!=null){
-                        weatherInfo.setValue(weatherModel);
-                    }
-
-                }
-            }
-            @Override
-            public void onFailure(Call<WeatherModel> call, Throwable t) {
-                weatherInfo.setValue(null);
-
+            public void setResult(WeatherModel data) {
+                weatherInfo.setValue(data);
             }
         });
     }
 
-    public int convertFtoC(double temp) {
-        return (int) temp-273;
-    }
 }
