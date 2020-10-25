@@ -128,9 +128,9 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:background="@color/colorPrimary"
-                    android:text="@string/next_4_days_forecost"
+                    android:text="@string/next_7_days_forecost"
                     android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
