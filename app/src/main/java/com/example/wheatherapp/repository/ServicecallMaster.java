@@ -2,6 +2,7 @@ package com.example.wheatherapp.repository;
 
 import android.util.Log;
 
+import com.example.wheatherapp.model.GetLocationByCitynameModel;
 import com.example.wheatherapp.model.WeatherModel;
 
 import retrofit2.Call;
@@ -34,5 +35,22 @@ public class ServicecallMaster {
 
             }
         });
+    }
+    public void getLocation(String cityname,final ResultHandler<GetLocationByCitynameModel>weatherModelResultHandlerr){
+        ServerClient serverClient=new ServerClient();
+        ApiCall apiCall=serverClient.retrofit.create(ApiCall.class);
+        Call<GetLocationByCitynameModel> getLocationByCitynameModelCall=apiCall.getLocation(cityname);
+        getLocationByCitynameModelCall.enqueue(new Callback<GetLocationByCitynameModel>() {
+            @Override
+            public void onResponse(Call<GetLocationByCitynameModel> call, Response<GetLocationByCitynameModel> response) {
+                weatherModelResultHandlerr.setResult(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<GetLocationByCitynameModel> call, Throwable t) {
+                weatherModelResultHandlerr.setResult(null);
+            }
+        });
+
     }
 }

@@ -12,7 +12,13 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +29,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.wheatherapp.adapter.ForecastDisplayAdapter;
 import com.example.wheatherapp.databinding.ActivityWeatherDisplayBinding;
+import com.example.wheatherapp.model.GetLocationByCitynameModel;
 import com.example.wheatherapp.model.WeatherModel;
 import com.example.wheatherapp.viewmodel.WeatherViewModel;
 
@@ -73,6 +80,34 @@ public class WeatherDisplayActivity extends AppCompatActivity {
     };
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_xml, menu);
+
+        MenuItem search_item = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) search_item.getActionView();
+        searchView.setFocusable(false);
+        searchView.setQueryHint("Search");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                if (!TextUtils.isEmpty(s)) {
+                    weatherViewModel.loadLocation(s);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         displayBinding = DataBindingUtil.setContentView(this, R.layout.activity_weather_display);
@@ -101,6 +136,21 @@ public class WeatherDisplayActivity extends AppCompatActivity {
 
             }
         });
+
+        weatherViewModel.getLocationInfo().observe(this, new Observer<GetLocationByCitynameModel>() {
+            @Override
+            public void onChanged(GetLocationByCitynameModel getLocationByCitynameModel) {
+                progressDialog.dismiss();
+                if (getLocationByCitynameModel!=null){
+                    weatherViewModel.loadUrl(getLocationByCitynameModel.getCoord().getLat(),getLocationByCitynameModel.getCoord().getLat());
+
+                }else {
+                    Toast.makeText(WeatherDisplayActivity.this,"city not found",Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
         manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         initLocation();
     }
