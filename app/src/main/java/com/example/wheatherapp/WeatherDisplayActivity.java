@@ -87,7 +87,7 @@ public class WeatherDisplayActivity extends AppCompatActivity {
         MenuItem search_item = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) search_item.getActionView();
         searchView.setFocusable(false);
-        searchView.setQueryHint("Search");
+        searchView.setQueryHint("City Name");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -142,10 +142,16 @@ public class WeatherDisplayActivity extends AppCompatActivity {
             public void onChanged(GetLocationByCitynameModel getLocationByCitynameModel) {
                 progressDialog.dismiss();
                 if (getLocationByCitynameModel!=null){
+                    if (progressDialog!=null){
+                        progressDialog.show();
+                    }
                     weatherViewModel.loadUrl(getLocationByCitynameModel.getCoord().getLat(),getLocationByCitynameModel.getCoord().getLat());
 
                 }else {
                     Toast.makeText(WeatherDisplayActivity.this,"city not found",Toast.LENGTH_LONG).show();
+                    if (progressDialog!=null && progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
                 }
 
             }
@@ -184,7 +190,6 @@ public class WeatherDisplayActivity extends AppCompatActivity {
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
             return true;
         }
-
         return false;
     }
 }
